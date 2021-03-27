@@ -1,7 +1,23 @@
+require('dotenv').config()
 const express = require('express');
 const app = new express();
 
 app.use(express.static('client'))
+
+function getNLUInstance() {
+    const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+    const { IamAuthenticator } = require('ibm-watson/auth');
+
+    const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
+        version: '2020-08-01',
+        authenticator: new IamAuthenticator({
+            apikey: process.env.API_KEY,
+        }),
+        serviceUrl: process.env.API_URL,
+    });
+
+    return naturalLanguageUnderstanding;
+}
 
 const cors_app = require('cors');
 app.use(cors_app());
